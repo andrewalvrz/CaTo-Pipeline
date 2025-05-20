@@ -1,7 +1,7 @@
 package main
 
-deny[msg] {
+deny[msg] if {
   some i, j
   input.artifacts[i].vulnerabilities[j].severity == "High"
-  msg := "High severity CVE found"
+  msg := "High severity CVE found in " + input.artifacts[i].name
 }
