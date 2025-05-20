@@ -20,10 +20,7 @@ This project continuously scans containerized applications for vulnerabilities, 
 
 ## 🧱 Pipeline Overview
 
-<details> <summary>Click to expand Mermaid block (GitHub collapses large diagrams)</summary>
-mermaid
-Copy
-Edit
+```mermaid
 graph TD
   A[Code Commit] --> B[Build Docker Image]
   B --> C[Generate SBOM with Syft]
@@ -32,4 +29,4 @@ graph TD
   D --> E
   E --> F[Write Compliance Report]
   F --> G[Commit & Push to Repo]
-</details>
+
