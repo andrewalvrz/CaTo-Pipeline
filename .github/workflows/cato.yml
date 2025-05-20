@@ -22,8 +22,7 @@ jobs:
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
 
-    - name: Create sbom folder
-      run: mkdir -p sbom
+    
 
     - name: Generate SBOM
       run: |
@@ -63,3 +62,14 @@ jobs:
       with:
         name: compliance-report
         path: reports/report.md
+
+    - name: Commit and push report to repo
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git pull origin ${{ github.ref_name }}
+        git add reports/report.md
+        git commit -m "ci: add compliance report [skip ci]" || echo "No changes to commit"
+        git push origin HEAD:${{ github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
