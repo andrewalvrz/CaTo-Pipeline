@@ -1,6 +1,7 @@
 package main
 
 deny[msg] {
-  input.artifacts[_].vulnerabilities[_].severity == "High"
+  some i, j
+  input.artifacts[i].vulnerabilities[j].severity == "High"
   msg := "High severity CVE found"
 }
