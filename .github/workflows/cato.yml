@@ -45,9 +45,13 @@ jobs:
 
     - name: Run OPA policy check
       run: |
-        opa eval --input sbom/syft.json --data policies/ --format pretty "data.main.deny"
+       opa eval --input sbom/syft.json --data policies/ --format pretty "data.main.deny"
 
-    - name: Generate report
+    - name: Create reports folder
+      run: mkdir -p reports
+
+
+    - name: Generate Compliance report
       run: |
         echo "## Compliance Report" > reports/report.md
         echo "✅ SBOM generated with Syft" >> reports/report.md
