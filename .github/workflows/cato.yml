@@ -1,0 +1,47 @@
+name: CaTO DevSecOps Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  security-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: docker build -t secure-app:latest .
+
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+    - name: Generate SBOM
+      run: |
+        syft secure-app:latest -o json > sbom/syft.json
+
+    - name: Install Grype
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+    - name: CVE Scan
+      run: |
+        grype secure-app:latest --only-fixed -o table || true
+
+    - name: Install OPA
+      run: |
+        curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64_static
+        chmod +x opa
+        sudo mv opa /usr/local/bin
+
+    - name: Run OPA policy check
+      run: |
+        opa eval --input sbom/syft.json --data policies/ --format pretty "data.main.deny"
+
+    - name: Generate report
+      run: |
+        echo "## Compliance Report" > reports/report.md
+        echo "✅ SBOM generated with Syft" >> reports/report.md
+        echo "✅ CVE scan completed with Grype" >> reports/report.md
+        echo "✅ Policy evaluated with OPA" >> reports/report.md
