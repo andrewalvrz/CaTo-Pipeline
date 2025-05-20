@@ -13,9 +13,17 @@ jobs:
     - name: Build Docker image
       run: docker build -t secure-app:latest .
 
+    - name: Create sbom folder
+      run: mkdir -p sbom
+
+
     - name: Install Syft
       run: |
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+
+    - name: Create sbom folder
+      run: mkdir -p sbom
 
     - name: Generate SBOM
       run: |
