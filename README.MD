@@ -20,12 +20,16 @@ This project continuously scans containerized applications for vulnerabilities, 
 
 ## 🧱 Pipeline Overview
 
-```mermaid
+<details> <summary>Click to expand Mermaid block (GitHub collapses large diagrams)</summary>
+mermaid
+Copy
+Edit
 graph TD
-    A[Code Commit] --> B[Build Docker Image]
-    B --> C[Generate SBOM (Syft)]
-    B --> D[Run CVE Scan (Grype)]
-    C --> E[Evaluate Policies (OPA)]
-    D --> E
-    E --> F[Write Compliance Report]
-    F --> G[Commit & Push to Repo]
+  A[Code Commit] --> B[Build Docker Image]
+  B --> C[Generate SBOM with Syft]
+  B --> D[Run CVE Scan with Grype]
+  C --> E[Evaluate Policies with OPA]
+  D --> E
+  E --> F[Write Compliance Report]
+  F --> G[Commit & Push to Repo]
+</details>
